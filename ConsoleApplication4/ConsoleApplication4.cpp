@@ -71,8 +71,84 @@ int main(int argc, char* argv[])
     std::cin >> end;
 
     // Algorithme de Dijkstra
+    std::vector<std::pair<Nodes*, int>> shortestPath;
+    std::vector<std::pair<Nodes*, int>> unvisited;
+    std::vector<std::pair<Nodes*, int>> visited;
+    Nodes* current = nullptr;
+    Nodes* startNode = nullptr;
+    Nodes* endNode = nullptr;
+    int weight = 0;
+
+    // Initialisation de l'algorithme
+    for(Nodes* n : graphs)
+    {
+        if(n->getName() == start)
+        {
+            startNode = n;
+            unvisited.emplace_back(n, 0);
+        }
+        else
+        {
+            unvisited.emplace_back(n, graphs.size());
+        }
+    }
+
+    // Algorithme
+    while(!unvisited.empty())
+    {
+        current = unvisited[0].first;
+        weight = unvisited[0].second;
+        unvisited.erase(unvisited.begin());
+        visited.emplace_back(current, weight);
+
+        for(std::pair<Nodes*, int> p : current->getNeighbors())
+        {
+            std::cout << "Voisin : " << p.first->getName() << " (" << p.second << ")" << std::endl;
+            if(p.first->getName() == end)
+            {
+                endNode = p.first;
+                std::cout << "Point d'arriver : " << endNode->getName() << std::endl;
+                break;
+            }
+            else
+            {
+                for(std::pair<Nodes*, int> u : unvisited)
+                {
+                    std::cout << "Voisin : " << p.first->getName() << " (" << p.second << ")" << std::endl;
+                    if(u.first == p.first)
+                    {
+                        std::cout << "Voisin non visite : " << u.first->getName() << std::endl;
+                        if(u.second > weight + p.second)
+                        {
+                            u.second = weight + p.second;
+                            std::cout << "Voisin non visite : " << u.first->getName() << " (" << weight + p.second << ")" << std::endl;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    // Affichage du chemin le plus court
+    std::cout << "Chemin le plus court : ";
+    for(std::pair<Nodes*, int> p : visited)
+    {
+        if(p.first == endNode)
+        {
+            std::cout << p.first->getName() << " (" << p.second << ")";
+            break;
+        }
+    }
     
-    
-    
+    // Suppression des vecteurs
+    shortestPath.clear();
+    unvisited.clear();
+    visited.clear();
+    graphs.clear();
+
+    // Suppression des variables
+    weight = 0;
+
+    // Fin du programme
     return 0;
 }
