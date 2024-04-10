@@ -103,25 +103,20 @@ int main(int argc, char* argv[])
 
         for(std::pair<Nodes*, int> p : current->getNeighbors())
         {
-            std::cout << "Voisin : " << p.first->getName() << " (" << p.second << ")" << std::endl;
             if(p.first->getName() == end)
             {
                 endNode = p.first;
-                std::cout << "Point d'arriver : " << endNode->getName() << std::endl;
                 break;
             }
             else
             {
                 for(std::pair<Nodes*, int> u : unvisited)
                 {
-                    std::cout << "Voisin : " << p.first->getName() << " (" << p.second << ")" << std::endl;
                     if(u.first == p.first)
                     {
-                        std::cout << "Voisin non visite : " << u.first->getName() << std::endl;
                         if(u.second > weight + p.second)
                         {
                             u.second = weight + p.second;
-                            std::cout << "Voisin non visite : " << u.first->getName() << " (" << weight + p.second << ")" << std::endl;
                         }
                     }
                 }
