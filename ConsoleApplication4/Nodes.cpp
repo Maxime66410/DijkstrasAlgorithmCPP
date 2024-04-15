@@ -79,6 +79,3 @@ void Nodes::setName(char name)
 {
     name_ = name;
 }
-
-
-
