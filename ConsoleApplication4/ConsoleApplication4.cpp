@@ -127,6 +127,12 @@ int main(int argc, char* argv[])
         if (n->getName() == end) endNode = n;
     }
 
+    // Vérification si les noeuds start et end sont valides
+    if (startNode == nullptr || endNode == nullptr) {
+        std::cout << "Point de depart ou d'arriver invalide" << std::endl;
+        return 0;
+    }
+
     // Algorithme de Dijkstra
     dijkstra(startNode, endNode);
 
