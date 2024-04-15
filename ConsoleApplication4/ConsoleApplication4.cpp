@@ -20,7 +20,6 @@ void dijkstra(Nodes* start, Nodes* end) {
     // Boucle pour trouver le chemin le plus court entre le point de départ et d'arriver
     while (!pq.empty()) {
         Nodes* u = pq.top().second; // Récupération du noeud avec la plus petite distance
-        int d = pq.top().first; // Récupération de la distance du noeud
         pq.pop(); // Suppression du noeud de la file de priorité
 
         if (u == end) break; // Arrêt de la boucle si le noeud est le point d'arriver
@@ -68,6 +67,8 @@ void dijkstra(Nodes* start, Nodes* end) {
     dist.clear();
     prev.clear();
     while (!pq.empty()) pq.pop();
+    while (!path.empty()) path.pop();
+    current = nullptr;
 }
 
 int main(int argc, char* argv[])
@@ -128,6 +129,11 @@ int main(int argc, char* argv[])
 
     // Algorithme de Dijkstra
     dijkstra(startNode, endNode);
+
+    // Suppression des variables
+    graphs.clear();
+    start = 0;
+    end = 0;
 
     // Fin du programme
     return 0;
