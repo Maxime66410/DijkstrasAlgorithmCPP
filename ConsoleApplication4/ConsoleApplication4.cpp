@@ -10,36 +10,42 @@
 
 // Algorithme de Dijkstra
 void dijkstra(Nodes* start, Nodes* end) {
-    std::unordered_map<Nodes*, int> dist; // Table de hachage pour les distances
-    std::unordered_map<Nodes*, Nodes*> prev; // Table de hachage pour les noeuds précédents
-    std::priority_queue<std::pair<int, Nodes*>, std::vector<std::pair<int, Nodes*>>, std::greater<std::pair<int, Nodes*>>> pq; // File de priorité pour les noeuds
+    std::unordered_map<Nodes*, int> distance; // Table de hachage pour les distances
+    std::unordered_map<Nodes*, Nodes*> precedent; // Table de hachage pour les noeuds précédents
+    std::priority_queue<std::pair<int, Nodes*>, std::vector<std::pair<int, Nodes*>>, std::greater<std::pair<int, Nodes*>>> pn; // File de priorité pour les noeuds
 
-    dist[start] = 0; // Initialisation de la distance du point de départ à 0
-    pq.push({0, start}); // Ajout du point de départ dans la file de priorité
+    distance[start] = 0; // Initialisation de la distance du point de départ à 0
+    pn.push({0, start}); // Ajout du point de départ dans la file de priorité
 
     // Boucle pour trouver le chemin le plus court entre le point de départ et d'arriver
-    while (!pq.empty()) {
-        Nodes* u = pq.top().second; // Récupération du noeud avec la plus petite distance
-        pq.pop(); // Suppression du noeud de la file de priorité
+    while (!pn.empty()) {
+        Nodes* u = pn.top().second; // Récupération du noeud avec la plus petite distance
+        pn.pop(); // Suppression du noeud de la file de priorité
 
         if (u == end) break; // Arrêt de la boucle si le noeud est le point d'arriver
+
+        std::cout << "Noeud courant : " << u->getName() << std::endl;
 
         // Boucle pour trouver le chemin le plus court entre le point de départ et d'arriver
         for (std::pair<Nodes*, int> neighbor : u->getNeighbors()) {
             Nodes* v = neighbor.first; // Récupération du voisin du noeud
             int weight = neighbor.second; // Récupération du poids du voisin
+
+            std::cout << "Voisin : " << v->getName() << " (" << weight << ")" << std::endl;
             
             // Vérification si la distance du voisin est plus grande que la distance du noeud plus le poids du voisin
-            if (dist.find(v) == dist.end() || dist[v] > dist[u] + weight) {
-                dist[v] = dist[u] + weight; // Ajout de la distance du voisin dans la table de hachage
-                prev[v] = u; // Ajout du noeud précédent dans la table de hachage
-                pq.push({dist[v], v}); // Ajout du voisin dans la file de priorité
+            if (distance.find(v) == distance.end() || distance[v] > distance[u] + weight) {
+                distance[v] = distance[u] + weight; // Ajout de la distance du voisin dans la table de hachage
+                precedent[v] = u; // Ajout du noeud précédent dans la table de hachage
+                pn.push({distance[v], v}); // Ajout du voisin dans la file de priorité
+
+                std::cout << "Distance : " << distance[v] << std::endl;
             }
         }
     }
 
     // Affichage du chemin le plus court entre le point de départ et d'arriver
-    if (prev.find(end) == prev.end()) {
+    if (precedent.find(end) == precedent.end()) {
         std::cout << "Pas de chemin trouver entre " << start->getName() << " et " << end->getName() << std::endl;
         return;
     }
@@ -50,7 +56,7 @@ void dijkstra(Nodes* start, Nodes* end) {
     // Boucle pour trouver le chemin le plus court entre le point de départ et d'arriver
     while (current != nullptr) {
         path.push(current); // Ajout du noeud courant dans la pile
-        current = prev[current]; // Récupération du noeud précédent
+        current = precedent[current]; // Récupération du noeud précédent
     }
 
     // Affichage du chemin le plus court entre le point de départ et d'arriver
@@ -58,15 +64,15 @@ void dijkstra(Nodes* start, Nodes* end) {
     
     // La boucle s'arrête si la pile est vide
     while (!path.empty()) {
-        std::cout << path.top()->getName() << " (" << dist[path.top()] << ") -> ";
+        std::cout << path.top()->getName() << " (" << distance[path.top()] << ") -> ";
         path.pop(); // Suppression du noeud de la pile
     }
     std::cout << "Point d'arriver " << end->getName() << std::endl;
 
     // Suppression des variables
-    dist.clear();
-    prev.clear();
-    while (!pq.empty()) pq.pop();
+    distance.clear();
+    precedent.clear();
+    while (!pn.empty()) pn.pop();
     while (!path.empty()) path.pop();
     current = nullptr;
 }
